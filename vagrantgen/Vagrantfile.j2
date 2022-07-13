@@ -5,11 +5,11 @@
 Vagrant.configure("2") do |config|
     config.vm.synced_folder ".", "/vagrant", disabled: true
 
-{% for cluster in clusters %}
-{% for vm in cluster['vms'] %}
-    config.vm.define "{{ cluster['name'] }}-{{ vm['name'] }}" do |node|
-        node.vm.hostname = "{{ cluster['name'] }}-{{ vm['name'] }}"
-{% if cluster['provider'] == 'libvirt' %}
+{% for project in projects %}
+{% for vm in project['vms'] %}
+    config.vm.define "{{ project['projectname'] }}{{ vm['name'] }}" do |node|
+        node.vm.hostname = "{{ project['projectname'] }}{{ vm['name'] }}"
+{% if project['provider'] == 'libvirt' %}
         node.vm.box = "{{ vm['box'] }}"
         node.vm.provider "libvirt" do |provider|
             provider.uri = 'qemu:///system'
@@ -19,11 +19,11 @@ Vagrant.configure("2") do |config|
             provider.cpus = "{{ vm['cpu'] }}"
 {% if vm.disks %}
 {% for disk in vm['disks'] %}   
-            provider.storage :file, :size => '{{ disk['size'] }}', :path => '{{ cluster['name'] }}-{{ vm['name'] }}-{{ disk['name'] }}'
+            provider.storage :file, :size => '{{ disk['size'] }}', :path => '{{ project['projectname'] }}{{ vm['name'] }}-{{ disk['name'] }}'
 {% endfor %}
 {% endif %}
         end
-{% elif cluster['provider'] == 'virtualbox' %}
+{% elif project['provider'] == 'virtualbox' %}
         node.vm.box = "{{ vm['box'] }}"
         node.vm.provider "virtualbox" do |provider|
             provider.memory = "{{ vm['mem'] }}"
@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
 {% endfor %}
 {% endif %}
         end
-{% elif cluster['provider'] == 'docker' %}
+{% elif project['provider'] == 'docker' %}
         node.ssh.username = "vagrant"
         node.ssh.password = "vagrant"
         node.vm.provider "docker" do |provider|
@@ -51,7 +51,7 @@ Vagrant.configure("2") do |config|
 {% endif %}
         end
 {% else %}
-        fail Vagrant::Errors::VagrantError.new, "Provider '{{ cluster['provider'] }}' unknown or not configured in VF_generator"
+        fail Vagrant::Errors::VagrantError.new, "Provider '{{ project['provider'] }}' unknown or not configured in VF_generator"
 {% endif %}
 {% if vm.ssh_guest_port %}
         node.ssh.guest_port = {{ vm['ssh_guest_port'] }}
@@ -88,7 +88,7 @@ Vagrant.configure("2") do |config|
         node.vm.provision "ansible" do |ansible|
             ansible.compatibility_mode = "2.0"
             ansible.playbook = "{{ provision['payload'] }}"
-{% if cluster['provider'] == 'docker' %}
+{% if project['provider'] == 'docker' %}
             ansible.inventory_path = "inventory"
 {% endif %}
         end

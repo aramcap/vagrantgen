@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
    name = 'vagrantgen',
-   version = '0.4',
+   version = '0.5',
    description = 'Vagrantfile generator',
    long_description=long_description,
    long_description_content_type='text/markdown',

@@ -5,7 +5,7 @@ Vagrantgen is a simply CLI to generate Vagrantfiles from a standard YAML.
 This is a YAML example:
 
 ```yml
-- name: cluster1
+- projectname: cluster1
   provider: virtualbox
   vms:
   - name: vm01
@@ -19,8 +19,8 @@ And this the Vagrantfile generated:
 Vagrant.configure("2") do |config|
     config.vm.synced_folder ".", "/vagrant", disabled: true
 
-    config.vm.define "cluster1-vm01" do |node|
-        node.vm.hostname = "cluster1-vm01"
+    config.vm.define "cluster1vm01" do |node|
+        node.vm.hostname = "cluster1vm01"
         node.vm.box = "rockylinux/8"
         node.vm.provider "virtualbox" do |provider|
             provider.memory = "1024"
@@ -64,7 +64,7 @@ Any menu has `--help` command available.
 ## Another examples
 
 ```yml
-- name: cluster1
+- projectname: cluster1
   provider: libvirt # libvirt or virtualbox or docker
   vms:
   - name: vm01
@@ -83,7 +83,7 @@ Any menu has `--help` command available.
 ```
 
 ```yml
-- name: cluster1
+- projectname: cluster1
   provider: docker # libvirt or virtualbox or docker
   vms:
   - name: vm01
@@ -92,7 +92,7 @@ Any menu has `--help` command available.
 
 Docker provider not support net tag (ports is optional tag):
 ```yml
-- name: cluster1
+- projectname: cluster1
   provider: docker # libvirt or virtualbox or docker
   vms:
   - name: vm01
@@ -103,7 +103,7 @@ Docker provider not support net tag (ports is optional tag):
 
 Example with provision (optional tag):
 ```yml
-- name: cluster1
+- projectname: cluster1
   provider: docker # libvirt or virtualbox or docker
   vms:
   - name: vm01
@@ -114,7 +114,7 @@ Example with provision (optional tag):
 ```
 
 ```yml
-- name: cluster1
+- projectname: cluster1
   provider: docker # libvirt or virtualbox or docker
   vms:
   - name: vm01
@@ -126,7 +126,7 @@ Example with provision (optional tag):
 
 Libvirt or Virtualbox providers not support ports tag:
 ```yml
-- name: cluster1
+- projectname: cluster1
   provider: virtualbox # libvirt or virtualbox or docker
   vms:
   - name: vm01
@@ -137,7 +137,7 @@ Libvirt or Virtualbox providers not support ports tag:
 
 Example with network (optional tag):
 ```yml
-- name: cluster1
+- projectname: cluster1
   provider: virtualbox # libvirt or virtualbox or docker
   vms:
   - name: vm01

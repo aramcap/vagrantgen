@@ -30,7 +30,7 @@ def loadyamlconfig(file):
 
 def template_vagrantfile(dicc):
     template = j2.Environment(loader=j2.PackageLoader("vagrantgen", "."), trim_blocks=True).get_template("Vagrantfile.j2")
-    return template.render(clusters=dicc)
+    return template.render(projects=dicc)
 
 
 def template_ansibleinventory(dicc):
